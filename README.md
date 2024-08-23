@@ -1,8 +1,29 @@
 # playwright-intercept
 
-This extension library provides a Cypress-influenced API for intercepting requests in Playwright.
+This extension library provides a Cypress-influenced API for intercepting network requests in Playwright.
 
-#### Setup
+### Features
+
+- Strongly typed with TypeScript
+- Intercept `POST`, `GET`, `PUT`, `PATCH` and `DELETE` responses
+- Modify response bodies at runtime with using data from request params/bodies
+- Support for Express-like route params
+- Assert that a request was made/not made to a specific URL
+- Assert number of requests made to a specific URL
+- Wait for requests to be made to a specific URL
+
+### Installation
+
+```bash
+npm i playwright-intercept --save-dev
+```
+
+### Setup
+
+Simply extend your `base` test fixture with the `Intercept` class, providing optional global configuration options:
+
+- `fixturePathPrefix` is the path to your mock data folder
+- `staticExtensions` are extensions of files to be ignored entirely
 
 ```typescript
 const test = base.extend<BaseFixtures>({
@@ -17,7 +38,7 @@ const test = base.extend<BaseFixtures>({
 });
 ```
 
-#### Usage
+### Basic Usage
 
 ```typescript
 test("Can submit form", async ({ page, intercept }) => {
@@ -99,7 +120,8 @@ test("Can submit form", async ({ page, intercept }) => {
 });
 ```
 
-This repo's test folder contains various usage examples for your perusal.
+> [!NOTE]  
+> This repo's `test` folder contains various setup & usage examples that may help you.
 
 ## API
 
