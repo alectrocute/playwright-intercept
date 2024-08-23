@@ -84,7 +84,7 @@ test("Can submit form", async ({ page, intercept }) => {
 ```
 
 > [!TIP]  
-> This repo's [`tests`](https://github.com/alectrocute/playwright-intercept/tree/main/tests) folder contains various setup & usage examples.
+> This repo's [`tests`](https://github.com/alectrocute/playwright-intercept/tree/main/tests) folder contains various setup & usage examples. In particular, [`collection-example.spec.ts`](https://github.com/alectrocute/playwright-intercept/blob/main/tests/collection-example.spec.ts) demonstrates how you can group multiple intercepts together as a single fixture.
 
 ## API
 
