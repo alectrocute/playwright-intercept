@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+.npmrc
+.playwright-report
+archive.zip
+dist/
+node_modules/
+test-results/

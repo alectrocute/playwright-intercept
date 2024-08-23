@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>Mock App</title>
+    <style>
+      body {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+      }
+
+      div {
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      #response {
+        max-height: 100px;
+        overflow: hidden;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <span>
+        URL
+        <input id="url" />
+      </span>
+
+      <span>
+        Method
+        <select id="method">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </span>
+
+      <span>
+        Body
+        <input id="body" />
+      </span>
+
+      <button id="submit">Send XHR</button>
+
+      <span id="response"></span>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        document
+          .getElementById("submit")
+          .addEventListener("mousedown", onClickSubmit);
+      });
+
+      async function onClickSubmit() {
+        const url = document.getElementById("url").value;
+        const method = document.getElementById("method").value;
+        const body = document.getElementById("body").value;
+
+        await fetch(url, {
+          method,
+          body: body ? body : undefined,
+        })
+          .then((response) => response.text())
+          .then((text) => {
+            document.getElementById("response").innerText = text;
+          });
+      }
+    </script>
+  </body>
+</html>
