@@ -6,7 +6,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    '@chesscom/eslint-config-chesscom-base/playwright',
   ],
   overrides: [
     {
