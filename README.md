@@ -76,6 +76,9 @@ test("Can submit form", async ({ page, intercept }) => {
 
   await page.locator("selector=save-button").click();
 
+  // again, wait until the request has been made
+  await postUserDetailsEndpoint.wait();
+
   await page.waitForSelector('div[role="alert"]');
 });
 ```
