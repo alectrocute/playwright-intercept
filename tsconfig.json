@@ -5,7 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "lib": [
       "es2021",
       "dom"
