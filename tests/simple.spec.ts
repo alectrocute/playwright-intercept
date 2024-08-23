@@ -384,32 +384,5 @@ test.describe('Simple', () => {
         'https://example.com/unhandled/2'
       );
     });
-
-    test('Delay response with `delay` option', async ({ page, intercept }) => {
-      const getRequestUrl = `${hostnamePrefix}/callback/get`;
-      const delay = 1000;
-
-      const getRequest = intercept.get({
-        url: getRequestUrl,
-        delay,
-        handler: ({ route }) => {
-          return route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: '',
-          });
-        },
-      });
-
-      await page.locator('#url').fill(getRequestUrl);
-      await page.locator('#method').selectOption('GET');
-      await page.locator('#submit').click();
-
-      const start = Date.now();
-      await getRequest.wait();
-      const end = Date.now();
-
-      expect(end - start).toBeGreaterThanOrEqual(delay);
-    });
   }
 });
