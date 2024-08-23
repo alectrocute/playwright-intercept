@@ -1,10 +1,11 @@
 # playwright-intercept
 
-This extension library provides a Cypress-influenced API for intercepting network requests in Playwright.
+This fixture extension provides a Cypress-influenced API for intercepting network requests in Playwright.
 
 ### Features
 
-- Strongly typed with TypeScript
+- Strongly typed in TypeScript
+- Full E2E test coverage (wouldn't it be ironic if this weren't the case)
 - Intercept `POST`, `GET`, `PUT`, `PATCH` and `DELETE` responses
 - Modify response bodies at runtime with using data from request params/bodies
 - Support for Express-like route params
