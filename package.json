@@ -1,6 +1,6 @@
 {
   "name": "playwright-intercept",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ergonomically mock, wait for and assert network requests in Playwright",
   "license": "GPL",
   "scripts": {
