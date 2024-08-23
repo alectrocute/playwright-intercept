@@ -165,7 +165,7 @@ Resolves promise if requests have been made to the URL via selected method.
 
 ### `<intercept>.requests`
 
-Gives you direct access to all requests.
+Gives you direct access to all requests made to the URL.
 
 ### `<intercept>.update(InterceptOptions | (InterceptOptions) => InterceptOptions)`
 
