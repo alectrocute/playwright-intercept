@@ -9,7 +9,7 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: base-default
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v3
