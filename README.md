@@ -1,17 +1,17 @@
 # playwright-intercept
 
-This fixture extension provides a Cypress-influenced API (like `cy.intercept`) for intercepting network requests in Playwright.
+This fixture extension provides a Cypress-influenced API (like [`cy.intercept`](https://docs.cypress.io/api/commands/intercept)) for mocking and intercepting network requests in Playwright.
 
 ### Features
 
+- Mock and intercept `POST`, `GET`, `PUT`, `PATCH` and `DELETE` responses
+- Craft dynamic responses at runtime using data from request params & bodies
+- Support for Express-like route params (eg. `/callback/:id`)
+- Assert that requests were made to a specific URL
+- Assert the content of request bodies
+- Wait for a request to be made before continuing
 - Strongly typed in TypeScript
 - Full E2E test coverage (wouldn't it be ironic if this weren't the case)
-- Intercept `POST`, `GET`, `PUT`, `PATCH` and `DELETE` responses
-- Modify response bodies at runtime with using data from request params/bodies
-- Support for Express-like route params
-- Assert that a request was made/not made to a specific URL
-- Assert number of requests made to a specific URL
-- Wait for requests to be made to a specific URL
 
 ### Installation
 
@@ -23,10 +23,13 @@ npm i playwright-intercept --save-dev
 
 Simply extend your `base` test fixture with the `Intercept` class, providing optional global configuration options:
 
-- `fixturePathPrefix` is the path to your mock data folder
-- `staticExtensions` are extensions of files to be ignored entirely
+- `fixturePathPrefix` is the path to your mock data folder, eg. a folder of JSON files containing default response bodies
+- To avoid Playwright log spam, `staticExtensions` are extensions of files that should never be intercepted
 
 ```typescript
+import * as base from "@playwright/test";
+import { Intercept } from "playwright-intercept";
+
 const test = base.extend<BaseFixtures>({
   intercept: async ({ page }, use) => {
     await use(
@@ -43,48 +46,59 @@ const test = base.extend<BaseFixtures>({
 
 ```typescript
 test("Can submit form", async ({ page, intercept }) => {
-  // first, set up the intercept
-  const postUserDetailsEndpoint = intercept.post({
-    url: "/callback/change-user-details",
+  // first, set up the intercept, for example:
+  const apiFormCallback = intercept.post({
+    url: "/api/form/:id",
     statusCode: 200,
     body: {
       status: "success",
     },
+    // or you could pass a file:
+    // fixture: "path/to/response-body.json",
+    // and even modify the response body at runtime:
+    // modifier: ({ body, params }) => {
+    //   if (params.id === "foo") {
+    //     body.status = "bar";
+    //   }
+    //   return body;
+    // },
   });
 
-  await page.goto("/my-account");
+  await page.goto("/my-form");
 
   await page.fill('input[name="name"]', "Bar");
 
-  await page.locator("selector=save-button").click();
+  await page.locator("#submit-button").click();
 
-  // wait until the request has been made
-  await postUserDetailsEndpoint.wait();
+  await apiFormCallback.wait();
 
-  // assert request body
-  await expect(postUserDetailsEndpoint.requests[0].postDataJSON()).toBe({
+  await expect(apiFormCallback.requests[0].postDataJSON()).toBe({
     name: "Bar",
   });
 
-  // update the intercept response body at runtime
-  postUserDetailsEndpoint.update({
+  apiFormCallback.update({
     statusCode: 400,
     body: {
       status: "fail",
     }
   });
 
-  await page.locator("selector=save-button").click();
+  await page.locator("#submit-button").click();
 
-  // again, wait until the request has been made
-  await postUserDetailsEndpoint.wait();
+  await apiFormCallback.wait();
 
   await page.waitForSelector('div[role="alert"]');
 });
 ```
 
 > [!TIP]  
-> This repo's [`tests`](https://github.com/alectrocute/playwright-intercept/tree/main/tests) folder contains various setup & usage examples. In particular, [`collection-example.spec.ts`](https://github.com/alectrocute/playwright-intercept/blob/main/tests/collection-example.spec.ts) demonstrates how you can group multiple intercepts together as a single fixture.
+> This repo's [`tests`](https://github.com/alectrocute/playwright-intercept/tree/main/tests) folder contains examples that demonstrate the setup and functionality of playwright-intercept.
+
+### Suggested Implementation Pattern
+
+We recommend you create fixtures of `Intercept` instances, logically grouped together. To see this pattern demonstrated, check out [`collection-example.spec.ts`](https://github.com/alectrocute/playwright-intercept/blob/main/tests/collection-example.spec.ts) in this repo.
+
+We understand that everybody has their own preferred implementation pattern, so if you've found another great way to structure your `Intercept` instances in your Playwright codebase, please let us know in a PR or Issue!
 
 ## API
 
@@ -134,14 +148,16 @@ export type InterceptOptions = BaseOptions &
   );
 ```
 
-### `<intercept>.wait({ timeout?: number })`
+At test runtime, `InterceptSurface` provides some methods and reactive attributes to help you assert requests.
+
+### `<InterceptSurface>.wait({ timeout?: number })`
 
 Resolves promise if requests have been made to the URL via selected method.
 
-### `<intercept>.requests`
+### `<InterceptSurface>.requests`
 
 Gives you direct access to all requests made to the URL.
 
-### `<intercept>.update(InterceptOptions | (InterceptOptions) => InterceptOptions)`
+### `<InterceptSurface>.update(InterceptOptions | (InterceptOptions) => InterceptOptions)`
 
-Allows you to change the options of an intercept post-initialization.
+Allows you to change the options of an intercept post-initialization for the lifetime of the test spec.

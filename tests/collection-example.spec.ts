@@ -2,6 +2,20 @@ import { Intercept, InterceptSurface } from "../dist";
 import * as base from "@playwright/test";
 import path from "path";
 
+// In the real world, you'd want to export `mockItemEndpoints` from a different .ts file
+function mockItemEndpoints(intercept: Intercept) {
+    return {
+        getAllItems: intercept.get({
+            url: "/get-all-items",
+            statusCode: 200,
+        }),
+        createItem: intercept.post({
+            url: "/create-item",
+            statusCode: 200,
+        }),
+    }
+}
+
 type FixtureStructure = Record<string, InterceptSurface>;
 type InterceptFixture = Intercept;
 
@@ -10,6 +24,7 @@ export async function intercept({ page }, use) {
         fixturePathPrefix: path.join(process.cwd(), "tests"),
     });
 
+    // You could treat this like a global "before each" hook
     const mockAppGet = intercept.get({
         url: 'https://example.com',
         fixture: 'mock-app/index.html',
@@ -29,41 +44,31 @@ const createInterceptFixture =
             await use(fixture);
         };
 
-function mockEndpoints(intercept: Intercept) {
-    return {
-        getAllItems: intercept.get({
-            url: "/get-all-items",
-            statusCode: 200,
-        }),
-        createItem: intercept.post({
-            url: "/create-item",
-            statusCode: 200,
-        }),
-    }
-}
-
 type Fixtures = {
     intercept: InterceptFixture;
-    mockEndpoints: ReturnType<typeof mockEndpoints>;
+    mockItemEndpoints: ReturnType<typeof mockItemEndpoints>;
 }
 
 const fixtures = {
     intercept,
-    mockEndpoints: createInterceptFixture(mockEndpoints),
+    mockItemEndpoints: createInterceptFixture(mockItemEndpoints),
 };
 
+// And finally, here's your potential `test` export!
 const test = base.test.extend<Fixtures>(fixtures);
 
-test('Example using collection of intercepts', async ({ page, mockEndpoints }) => {
+// Let's now use it, pulling in the `mockItemEndpoints` fixture.
+test('Example using collection of intercepts', async ({ page, mockItemEndpoints }) => {
     await page.locator('#url').fill("/get-all-items");
     await page.locator('#method').selectOption('GET');
     await page.locator('#submit').click();
 
-    await mockEndpoints.getAllItems.wait();
+    // See? You've already got your intercepts set up!
+    await mockItemEndpoints.getAllItems.wait();
 
     await page.locator('#url').fill("/create-item");
     await page.locator('#method').selectOption('POST');
     await page.locator('#submit').click();
 
-    await mockEndpoints.createItem.wait();
+    await mockItemEndpoints.createItem.wait();
 });
