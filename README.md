@@ -43,9 +43,6 @@ const test = base.extend<BaseFixtures>({
 
 ```typescript
 test("Can submit form", async ({ page, intercept }) => {
-  let groupDetailsJson = { id: 123, name: 'My Group!' };
-  let groupDetailsStatusCode = 200;
-
   // example passing "body",
   const getUserDetails = intercept.get({
     url: "/callback/user-details",
@@ -60,8 +57,8 @@ test("Can submit form", async ({ page, intercept }) => {
     url: "/callback/group-details",
     handler: ({ route }) => {
       route.fulfill({
-        json: groupDetailsJson,
-        status: groupDetailsStatusCode,
+        json: { id: 123, name: 'My Group!' },
+        status: 200,
       });
     },
   });
@@ -126,7 +123,7 @@ test("Can submit form", async ({ page, intercept }) => {
 
 ## API
 
-### `intercept[.get, .post, .put, .delete]`
+### `intercept[.get, .post, .patch, .put, .delete]`
 
 ```typescript
 type NamedRouteParams = Record<string | number, string | number>;
@@ -134,7 +131,6 @@ type NamedRouteParams = Record<string | number, string | number>;
 type InterceptOptions = {
   url: string; // URL or path to intercept, wildcards and named params supported
   statusCode?: number; // Status code for response, default: 200
-  delay?: number; // Amount of time in milliseconds to delay response
 } & (
   | ({
       mimeType?: string; // Override auto-detection and define explicit mime type
