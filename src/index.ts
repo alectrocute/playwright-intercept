@@ -61,11 +61,11 @@ export class Intercept {
     );
   }
 
-  private setup<T extends Buffer | object | string>(
-    options: InterceptOptions<T>,
+  private setup(
+    options: InterceptOptions,
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  ): InterceptSurface<T> {
-    const interceptSetup: InterceptSetup = {
+  ): InterceptSurface {
+    const interceptSetup = <InterceptSetup>{
       method,
       match: createMatchFunction(options.url),
       requests: reactive([]),
@@ -75,10 +75,10 @@ export class Intercept {
 
     this.intercepts.push(interceptSetup);
 
-    return {
+    return <InterceptSurface>{
       requests: interceptSetup.requests,
-      wait: (waitOptions?: WaitOptions) => wait(interceptSetup, waitOptions),
-      update: (updateOptions: UpdateOptions<T>) =>
+      wait: (waitOptions: WaitOptions) => wait(interceptSetup, waitOptions),
+      update: (updateOptions: UpdateOptions) =>
         update(interceptSetup, updateOptions),
     };
   }
@@ -91,23 +91,23 @@ export class Intercept {
     await this.route();
   }
 
-  get<T extends Buffer | object | string>(options: InterceptOptions<T>): InterceptSurface<T> {
+  get(options: InterceptOptions): InterceptSurface {
     return this.setup(options, 'GET');
   }
 
-  post<T extends Buffer | object | string>(options: InterceptOptions<T>): InterceptSurface<T> {
+  post(options: InterceptOptions): InterceptSurface {
     return this.setup(options, 'POST');
   }
 
-  put<T extends Buffer | object | string>(options: InterceptOptions<T>): InterceptSurface<T> {
+  put(options: InterceptOptions): InterceptSurface {
     return this.setup(options, 'PUT');
   }
 
-  patch<T extends Buffer | object | string>(options: InterceptOptions<T>): InterceptSurface<T> {
+  patch(options: InterceptOptions): InterceptSurface {
     return this.setup(options, 'PATCH');
   }
 
-  delete<T extends Buffer | object | string>(options: InterceptOptions<T>): InterceptSurface<T> {
+  delete(options: InterceptOptions): InterceptSurface {
     return this.setup(options, 'DELETE');
   }
 }

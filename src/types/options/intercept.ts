@@ -7,7 +7,6 @@ import type { Route, Request } from '@playwright/test';
 type BaseOptions = {
   url: string;
   statusCode?: number;
-  delay?: number;
 };
 
 type MimeTypeOption = {
@@ -15,21 +14,24 @@ type MimeTypeOption = {
 };
 
 type ModifierOption = {
-  modifier?: <T extends Buffer | object | string>(args: {
-    body: T;
+  modifier?: (args: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    body: any;
     params: Record<string, string>;
     request: Request;
-  }) => T;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }) => any;
 };
 
-type BodyOption<T extends Buffer | object | string> = {
-  body: T;
+type BodyOption = {
+  body: Buffer | object | string;
 };
 
 type FixtureOption = {
-  fixture:
-    | string
-    | ((args: { route: Route; params: Record<string, string> }) => string);
+  fixture: string | ((args: {
+    route: Route;
+    params: Record<string, string>;
+  }) => string);
 };
 
 type HandlerOption = {
@@ -40,9 +42,9 @@ type HandlerOption = {
   }) => void;
 };
 
-export type InterceptOptions<T extends Buffer | object | string> = BaseOptions &
+export type InterceptOptions = BaseOptions &
   (
-    | (MimeTypeOption & ModifierOption & (BodyOption<T> | FixtureOption))
+    | (MimeTypeOption & ModifierOption & (BodyOption | FixtureOption))
     | HandlerOption
     | { statusCode: number }
   );

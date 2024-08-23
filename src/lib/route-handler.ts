@@ -51,12 +51,6 @@ export async function routeHandler({
 
   const { params } = intercept.match(route.request().url()) as MatchResult;
 
-  if ('delay' in intercept) {
-    await new Promise((resolve) => {
-      setTimeout(resolve, intercept.delay);
-    });
-  }
-
   if ('body' in intercept || 'fixture' in intercept) {
     let body = '';
     let mimeType: MimeTypes = MimeTypes.JSON;

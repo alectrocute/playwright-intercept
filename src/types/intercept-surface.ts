@@ -6,8 +6,8 @@ import type { UpdateOptions } from './options/update';
  * User-facing intercept return type.
  */
 
-export interface InterceptSurface<T extends Buffer | object | string>{
+export interface InterceptSurface {
   requests: Request[];
   wait: (options?: WaitOptions) => Promise<void>;
-  update: (options: UpdateOptions<T>) => void;
+  update: (options: UpdateOptions) => void;
 }

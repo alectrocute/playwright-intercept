@@ -9,8 +9,7 @@ import { InterceptSetup } from '../intercept-setup';
  * Error is: "Property 'body' does not exist on type 'InterceptSetup'",
  * thrown when trying to access `intercept.body` in the `update` function.
  */
-export type UpdateOptions<T extends Buffer | object | string> =
+export type UpdateOptions =
   | Partial<InterceptSetup>
-  | ((intercept: {
-    body: T;
-  }) => InterceptSetup);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | ((intercept: any) => InterceptSetup);
