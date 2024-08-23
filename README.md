@@ -120,8 +120,8 @@ test("Can submit form", async ({ page, intercept }) => {
 });
 ```
 
-> [!NOTE]  
-> This repo's `test` folder contains various setup & usage examples that may help you.
+> [!TIP]  
+> This repo's [`tests`](https://github.com/alectrocute/playwright-intercept/tree/main/tests) folder contains various setup & usage examples.
 
 ## API
 
