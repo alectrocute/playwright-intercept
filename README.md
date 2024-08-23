@@ -1,6 +1,6 @@
 # playwright-intercept
 
-This fixture extension provides a Cypress-influenced API for intercepting network requests in Playwright.
+This fixture extension provides a Cypress-influenced API (`cy.intercept`) for intercepting network requests in Playwright.
 
 ### Features
 
