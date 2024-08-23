@@ -1,6 +1,6 @@
 {
   "name": "playwright-intercept",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Ergonomically mock, wait for and assert network requests in Playwright",
   "license": "GPL",
   "scripts": {
@@ -14,6 +14,7 @@
     "prettier": "prettier '**/*.ts' '!dist/**' --write"
   },
   "devDependencies": {
+    "@babel/types": "^7.25.4",
     "@playwright/test": "1.42.1",
     "@types/esprima": "^4.0.6",
     "@types/mime-types": "^2.1.4",
