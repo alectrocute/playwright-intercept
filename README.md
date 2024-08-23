@@ -1,6 +1,6 @@
 # playwright-intercept
 
-This fixture extension provides a Cypress-influenced API (`cy.intercept`) for intercepting network requests in Playwright.
+This fixture extension provides a Cypress-influenced API (like `cy.intercept`) for intercepting network requests in Playwright.
 
 ### Features
 
@@ -43,76 +43,38 @@ const test = base.extend<BaseFixtures>({
 
 ```typescript
 test("Can submit form", async ({ page, intercept }) => {
-  // example passing "body",
-  const getUserDetails = intercept.get({
-    url: "/callback/user-details",
-    body: {
-      id: 0,
-      username: "alectrocute",
-    },
-  });
-
-  // example passing "handler" with dynamic properties,
-  const getGroupDetails = intercept.get({
-    url: "/callback/group-details",
-    handler: ({ route }) => {
-      route.fulfill({
-        json: { id: 123, name: 'My Group!' },
-        status: 200,
-      });
-    },
-  });
-
-  // example passing "fixture" and optionally, "modifier",
-  const getForm = intercept.get({
-    url: "/callback/form/:id/get",
-    fixture: "example-fixture-2.json",
-    modifier: ({ body, params }) => {
-      const { id } = params;
-      body.id = id;
-      return body;
-    },
-  });
-
-  // example passing only "statusCode",
-  const saveForm = intercept.post({
-    url: "/callback/form/*/save",
+  // first, set up the intercept
+  const postUserDetailsEndpoint = intercept.post({
+    url: "/callback/change-user-details",
     statusCode: 200,
+    body: {
+      status: "success",
+    },
   });
 
-  await page.goto("/form-page");
+  await page.goto("/my-account");
 
-  await getUserDetails.wait();
-
-  await getGroupDetails.wait();
-
-  await getForm.wait();
-
-  await page.fill('input[name="foo"]', "Bar");
+  await page.fill('input[name="name"]', "Bar");
 
   await page.locator("selector=save-button").click();
 
-  await saveForm.wait();
+  // wait until the request has been made
+  await postUserDetailsEndpoint.wait();
 
-  getUserDetails.update({
-    body: {
-      id: 1,
-    }
-  })
-
-  // Alternatively, update options with a function:
-
-  // getUserDetails.update(options => {
-  //   options.body = {
-  //     id: 1,
-  //   }
-
-  //   return options;
-  // });
-
-  await expect(saveForm.requests[0].postDataJSON()).toBe({
-    foo: "Bar",
+  // assert request body
+  await expect(postUserDetailsEndpoint.requests[0].postDataJSON()).toBe({
+    name: "Bar",
   });
+
+  // update the intercept response body at runtime
+  postUserDetailsEndpoint.update({
+    statusCode: 400,
+    body: {
+      status: "fail",
+    }
+  });
+
+  await page.locator("selector=save-button").click();
 
   await page.waitForSelector('div[role="alert"]');
 });
@@ -126,37 +88,47 @@ test("Can submit form", async ({ page, intercept }) => {
 ### `intercept[.get, .post, .patch, .put, .delete]`
 
 ```typescript
-type NamedRouteParams = Record<string | number, string | number>;
+type BaseOptions = {
+  url: string;
+  statusCode?: number;
+};
 
-type InterceptOptions = {
-  url: string; // URL or path to intercept, wildcards and named params supported
-  statusCode?: number; // Status code for response, default: 200
-} & (
-  | ({
-      mimeType?: string; // Override auto-detection and define explicit mime type
-      modifier?: (args: {
-        body: any; // Parsed response body object or string
-        params: NamedRouteParams; // Any named route param matches in request URL
-        request: Request; // Full Playwright "Request" if/when needed
-      }) => any; // Return the modified JSON body
-    } & (
-      | {
-          body: Buffer | Object | string; // Response body buffer, JS object or string
-        }
-      | {
-          fixture: string; // Path to file
-        }
-    ))
-  | {
-      // For advanced use cases, pass a handler function to manually construct response
-      handler: (args: {
-        route: Route; // Full Playwright "Route" object
-        params: NamedRouteParams; // Any named route param matches in request URL
-        request: Request; // Full Playwright "Request" object
-      }) => void; // Return with `route.fulfill(...)` or `route.abort()`
-    }
-  | { statusCode: number } // Optionally, return only a status code
-);
+type MimeTypeOption = {
+  mimeType?: string;
+};
+
+type ModifierOption = {
+  modifier?: (args: {
+    body: any;
+    params: Record<string, string>;
+    request: Request;
+  }) => any;
+};
+
+type BodyOption = {
+  body: Buffer | object | string;
+};
+
+type FixtureOption = {
+  fixture:
+    | string
+    | ((args: { route: Route; params: Record<string, string> }) => string);
+};
+
+type HandlerOption = {
+  handler: (args: {
+    route: Route;
+    params: Record<string, string>;
+    request: Request;
+  }) => void;
+};
+
+export type InterceptOptions = BaseOptions &
+  (
+    | (MimeTypeOption & ModifierOption & (BodyOption | FixtureOption))
+    | HandlerOption
+    | { statusCode: number }
+  );
 ```
 
 ### `<intercept>.wait({ timeout?: number })`
