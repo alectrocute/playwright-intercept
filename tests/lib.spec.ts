@@ -78,8 +78,7 @@ test.describe('Lib Functions', () => {
 
     test('Wildcard query param usage', () => {
       let matchFn = createMatchFunction('*/service/settings/users/me?uid=*');
-      const actualUrl =
-        'http://example.com/service/settings/users/me?uid=123';
+      const actualUrl = 'http://example.com/service/settings/users/me?uid=123';
 
       expect(matchFn(actualUrl)).toEqual({
         index: 0,

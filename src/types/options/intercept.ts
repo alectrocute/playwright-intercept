@@ -28,10 +28,9 @@ type BodyOption = {
 };
 
 type FixtureOption = {
-  fixture: string | ((args: {
-    route: Route;
-    params: Record<string, string>;
-  }) => string);
+  fixture:
+    | string
+    | ((args: { route: Route; params: Record<string, string> }) => string);
 };
 
 type HandlerOption = {
