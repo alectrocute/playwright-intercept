@@ -6,12 +6,12 @@ This fixture extension provides a Cypress-influenced API (like [`cy.intercept`](
 
 - Mock and intercept `POST`, `GET`, `PUT`, `PATCH` and `DELETE` responses
 - Craft dynamic responses at runtime using data from request params & bodies
-- Support for Express-like route params (eg. `/callback/:id`)
 - Assert that requests were made to a specific URL
 - Assert the content of request bodies
 - Wait for a request to be made before continuing
+- Support for named route params (eg. `/api/:apiVersion/callback/:id`)
 - Strongly typed in TypeScript
-- Full E2E test coverage (wouldn't it be ironic if this weren't the case)
+- Test coverage
 
 ### Installation
 
