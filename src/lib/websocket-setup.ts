@@ -22,6 +22,7 @@ export async function websocketSetup(page: Page, options: WebsocketOptions): Pro
 
     // @todo: ...ugh
     await page.route("**", async (route) => {
+      console.log("route", route.request().url());
       try {
         const response = await route.fetch();
         const frameHtml = await response.text();

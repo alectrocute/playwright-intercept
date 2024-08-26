@@ -55,7 +55,7 @@ test('Example using collection of intercepts', async ({
 }) => {
   const mockDemoAppGet = intercept.get({
     url: 'https://example.com',
-    fixture: 'mock-app/xhr.html', // Yes, you can even mock HTML responses!
+    fixture: 'mock-app/index.html', // Yes, you can even mock HTML responses!
   });
 
   await page.goto('https://example.com');

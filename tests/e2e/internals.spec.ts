@@ -178,7 +178,7 @@ test.describe('Internals', () => {
       }
 
       test('HTML', () => {
-        runTest('xhr.html', 'text/html');
+        runTest('index.html', 'text/html');
       });
 
       test('CSS', () => {
