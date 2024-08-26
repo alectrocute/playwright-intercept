@@ -21,7 +21,7 @@ type InterceptFixture = Intercept;
 
 export async function intercept({ page }, use) {
   const intercept = new Intercept(page, {
-    fixturePathPrefix: path.join(process.cwd(), 'tests'),
+    fixturePathPrefix: path.join(process.cwd(), 'tests/e2e'),
   });
 
   await use(intercept);

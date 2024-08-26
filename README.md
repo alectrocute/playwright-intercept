@@ -150,14 +150,37 @@ export type InterceptOptions = BaseOptions &
 
 At test runtime, `InterceptSurface` provides some methods and reactive attributes to help you assert requests.
 
-### `<InterceptSurface>.wait({ timeout?: number })`
+### `.wait({ timeout?: number })`
 
-Resolves promise if requests have been made to the URL via selected method.
+Resolves promise if a request has been made to the URL via selected method.
 
-### `<InterceptSurface>.requests`
+```ts
+await myIntercept.wait({ timeout: 1000 });
+```
+
+### `.requests`
 
 Gives you direct access to all requests made to the URL.
 
-### `<InterceptSurface>.update(InterceptOptions | (InterceptOptions) => InterceptOptions)`
+```ts
+expect(myIntercept.requests[0].postData()).toEqual({
+  body: "foo"
+});
+
+expect(myIntercept.requests).toHaveLength(2);
+```
+
+### `.update(InterceptOptions | (InterceptOptions) => InterceptOptions)`
 
 Allows you to change the options of an intercept post-initialization for the lifetime of the test spec.
+
+```ts
+getRequest.update({
+  statusCode: 400,
+  body: { id: 1 },
+});
+```
+
+## Contributing
+
+Contributions are welcome! Please open [an issue](https://github.com/alectrocute/playwright-intercept/issues) or [PR](https://github.com/alectrocute/playwright-intercept/pulls) if you have any suggestions or improvements.
