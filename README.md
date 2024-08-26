@@ -4,7 +4,7 @@ This fixture extension provides a Cypress-influenced API (like [`cy.intercept`](
 
 ### Features
 
-- Mock and intercept `POST`, `GET`, `PUT`, `PATCH` and `DELETE` responses
+- Mock and intercept `GET`, `POST`, `PUT`, `PATCH` and `DELETE` responses
 - Craft dynamic responses at runtime using data from request params & bodies
 - Assert that requests were made to a specific URL
 - Assert the content of request bodies
