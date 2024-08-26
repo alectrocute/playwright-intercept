@@ -1,4 +1,4 @@
-# playwright-intercept
+# playwright-intercept 🎭
 
 This fixture extension provides a Cypress-influenced API (like [`cy.intercept`](https://docs.cypress.io/api/commands/intercept)) for mocking and intercepting network requests in Playwright.
 
@@ -26,7 +26,7 @@ Simply extend your `base` test fixture with the `Intercept` class, providing opt
 - `fixturePathPrefix` is the path to your mock data folder, eg. a folder of JSON files containing default response bodies
 - To avoid Playwright log spam, `staticExtensions` are extensions of files that should never be intercepted
 
-```typescript
+```ts
 import * as base from "@playwright/test";
 import { Intercept } from "playwright-intercept";
 
@@ -44,7 +44,7 @@ const test = base.extend<BaseFixtures>({
 
 ### Basic Usage
 
-```typescript
+```ts
 test("Can submit form", async ({ page, intercept }) => {
   // first, set up the intercept, for example:
   const apiFormCallback = intercept.post({
@@ -96,7 +96,7 @@ test("Can submit form", async ({ page, intercept }) => {
 
 ### Suggested Implementation Pattern
 
-We recommend you create fixtures of `Intercept` instances, logically grouped together. To see this pattern demonstrated, check out [`collection-example.spec.ts`](https://github.com/alectrocute/playwright-intercept/blob/main/tests/collection-example.spec.ts) in this repo.
+We recommend you create fixtures of `Intercept` instances, logically grouped together. To see this pattern demonstrated, check out [`collection-of-intercepts-as-fixture.spec.ts`](https://github.com/alectrocute/playwright-intercept/blob/main/tests/examples/collection-of-intercepts-as-fixture.spec.ts) in this repo.
 
 We understand that everybody has their own preferred implementation pattern, so if you've found another great way to structure your `Intercept` instances in your Playwright codebase, please let us know in a PR or Issue!
 
@@ -104,7 +104,7 @@ We understand that everybody has their own preferred implementation pattern, so 
 
 ### `intercept[.get, .post, .patch, .put, .delete]`
 
-```typescript
+```ts
 type BaseOptions = {
   url: string;
   statusCode?: number;
