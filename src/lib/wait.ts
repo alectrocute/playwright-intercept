@@ -15,20 +15,22 @@ export function wait(
   return expect
     .poll(
       () => {
+        const requests = intercept.wssPayloads ?? intercept.requests;
+  
         const hasFirstRequest = Boolean(
           intercept.previousRequestCount.value === 0 &&
-            intercept.requests.length > 0
+            requests!.length > 0
         );
 
         const hasNewRequests = Boolean(
           intercept.previousRequestCount.value > 0 &&
-            intercept.previousRequestCount.value < intercept.requests.length
+            intercept.previousRequestCount.value < requests!.length
         );
 
         const shouldPass = Boolean(hasFirstRequest || hasNewRequests);
 
         if (shouldPass) {
-          intercept.previousRequestCount.value = intercept.requests.length;
+          intercept.previousRequestCount.value = requests!.length;
           return true;
         }
 

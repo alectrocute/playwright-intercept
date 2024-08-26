@@ -1,18 +1,21 @@
+import { reactive, ref } from 'vue';
 import type { InterceptOptions } from './types/options/intercept';
 import type { InterceptSurface } from './types/intercept-surface';
 import type { InterceptSetup } from './types/intercept-setup';
 import type { GlobalOptions } from './types/options/global';
+import type { WebsocketOptions } from './types/options/websocket';
+import type { WaitOptions } from './types/options/wait';
+import type { UpdateOptions } from './types/options/update';
+import type { InterceptWebsocketSurface } from './types/intercept-websocket-surface';
 import type { Page, Route, Request } from '@playwright/test';
 import { routeHandler } from './lib/route-handler';
 import { createMatchFunction } from './lib/create-match-function';
 import { getMimeType } from './lib/get-mime-type';
 import { normalizeBody } from './lib/normalize-body';
-import { reactive, ref } from 'vue';
-import type { WaitOptions } from './types/options/wait';
-import type { UpdateOptions } from './types/options/update';
 import { wait } from './lib/wait';
 import { update } from './lib/update';
 import { getRouteRegex } from './lib/get-route-regex';
+import { websocketSetup } from './lib/websocket-setup';
 
 export { createMatchFunction, getMimeType, normalizeBody };
 
@@ -109,6 +112,10 @@ export class Intercept {
 
   delete(options: InterceptOptions): InterceptSurface {
     return this.setup(options, 'DELETE');
+  }
+
+  async wss(options: WebsocketOptions): Promise<InterceptWebsocketSurface> {
+    return await websocketSetup(this.page, options);
   }
 }
 
