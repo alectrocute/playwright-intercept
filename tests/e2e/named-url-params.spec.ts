@@ -1,6 +1,6 @@
 import { test, expect } from './base';
 
-test.describe('Named', () => {
+test.describe('Named URL Params', () => {
   test.describe('With hostname', () => {
     runTests('https://example.com');
   });

@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import { Intercept } from '../dist';
+import { Intercept } from '../../dist';
 import path from 'path';
 
 type BaseFixtures = {

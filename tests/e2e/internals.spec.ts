@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { createMatchFunction, getMimeType, normalizeBody } from '../dist';
+import { createMatchFunction, getMimeType, normalizeBody } from '../../dist';
 
-test.describe('Lib Functions', () => {
+test.describe('Internals', () => {
   test.describe('Route Matching', () => {
     test('Wildcard usage', () => {
       let matchFn = createMatchFunction('https://example.com/callback/*/*');

@@ -1,6 +1,6 @@
 import { test, expect } from './base';
 
-test.describe('Wildcard', () => {
+test.describe('Wildcard URL Paths', () => {
   test.describe('With hostname', () => {
     runTests('https://example.com');
   });

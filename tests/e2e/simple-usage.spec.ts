@@ -2,7 +2,7 @@ import { test, expect } from './base';
 import path from 'path';
 import fs from 'fs';
 
-test.describe('Simple', () => {
+test.describe('Simple Usage', () => {
   test.describe('With hostname', () => {
     runTests('https://example.com');
   });

@@ -1,5 +1,5 @@
+import { Intercept } from '../../dist';
 import { test as base, expect } from '@playwright/test';
-import { Intercept } from '../dist';
 import path from 'path';
 
 type BaseFixtures = {
@@ -10,13 +10,13 @@ const test = base.extend<BaseFixtures>({
   intercept: async ({ page }, use) => {
     await use(
       new Intercept(page, {
-        fixturePathPrefix: path.join(process.cwd(), 'tests'),
+        fixturePathPrefix: path.join(process.cwd(), 'tests/e2e'),
       })
     );
   },
   page: async ({ page }, use) => {
     const intercept = new Intercept(page, {
-      fixturePathPrefix: path.join(process.cwd(), 'tests'),
+      fixturePathPrefix: path.join(process.cwd(), 'tests/e2e'),
     });
 
     const mockAppGet = intercept.get({

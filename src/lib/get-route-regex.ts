@@ -1,3 +1,5 @@
+import { GlobalOptions } from '../types/options/global';
+
 /**
  * This function generates a RegExp based
  * upon static extensions, if applicable.
@@ -6,8 +8,6 @@
  * @param {string[]} ignoredUrls
  * @returns {string | RegExp}
  */
-
-import { GlobalOptions } from '../types/options/global';
 
 export function getRouteRegex(
   globalOptions?: GlobalOptions,
