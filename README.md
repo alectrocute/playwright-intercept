@@ -53,14 +53,25 @@ test("Can submit form", async ({ page, intercept }) => {
     body: {
       status: "success",
     },
-    // or you could pass a file:
+    // you can also pass a file for the response body:
     // fixture: "path/to/response-body.json",
-    // and even modify the response body at runtime:
+    //
+    // and modify it on the fly:
     // modifier: ({ body, params }) => {
     //   if (params.id === "foo") {
     //     body.status = "bar";
     //   }
     //   return body;
+    // },
+    //
+    // or pass a handler function for more advanced use cases:
+    // handler: ({ route, request, params }) => {
+    //   // `route` and `request` are both normal Playwright objects
+    //   return route.fulfill({
+    //     status: 200,
+    //     contentType: 'application/json',
+    //     body: `That named route param was ${params.id}`,
+    //   });
     // },
   });
 
