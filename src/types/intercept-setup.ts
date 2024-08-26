@@ -8,8 +8,9 @@ import type { Ref } from 'vue';
  */
 
 export type InterceptSetup = InterceptOptions & {
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  match: MatchFunction;
-  requests: Request[];
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'WSS';
+  match?: MatchFunction;
+  requests?: Request[];
+  wssPayloads?: string[];
   previousRequestCount: Ref<number>;
 };

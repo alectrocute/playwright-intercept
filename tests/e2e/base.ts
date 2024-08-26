@@ -21,7 +21,7 @@ const test = base.extend<BaseFixtures>({
 
     const mockAppGet = intercept.get({
       url: 'https://example.com',
-      fixture: 'mock-app/index.html',
+      fixture: 'mock-app/xhr.html',
     });
 
     await page.goto('https://example.com');

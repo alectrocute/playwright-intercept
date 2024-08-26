@@ -33,13 +33,22 @@ type FixtureOption = {
     | ((args: { route: Route; params: Record<string, string> }) => string);
 };
 
+export type WebsocketHandlerArgs = {
+  message?: string;
+  send?: (message: string) => void;
+};
+
+type WebsocketHandlerOption = {
+  handler: (args: WebsocketHandlerArgs) => void;
+};
+
 type HandlerOption = {
   handler: (args: {
     route: Route;
     params: Record<string, string>;
     request: Request;
   }) => void;
-};
+} | WebsocketHandlerOption;
 
 export type InterceptOptions = BaseOptions &
   (

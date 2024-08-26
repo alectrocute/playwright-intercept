@@ -33,7 +33,7 @@ export async function routeHandler({
 }: RouteHandlerParams) {
   const intercept = intercepts.find(
     (intercept) =>
-      intercept.match(route.request().url()) &&
+      intercept.match?.(route.request().url()) &&
       intercept.method === route.request().method()
   );
 
@@ -46,10 +46,10 @@ export async function routeHandler({
   // Ensure the response has been downloaded by client and then
   // as an anti-flake measure, push the request upon next tick.
   page.once('requestfinished', () => {
-    nextTick(() => intercept.requests.push(route.request()));
+    nextTick(() => intercept.requests?.push(route.request()));
   });
 
-  const { params } = intercept.match(route.request().url()) as MatchResult;
+  const { params } = intercept.match?.(route.request().url()) as MatchResult;
 
   if ('body' in intercept || 'fixture' in intercept) {
     let body = '';
