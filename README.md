@@ -175,7 +175,7 @@ expect(myIntercept.requests).toHaveLength(2);
 Allows you to change the options of an intercept post-initialization for the lifetime of the test spec.
 
 ```ts
-getRequest.update({
+myIntercept.update({
   statusCode: 400,
   body: { id: 1 },
 });
