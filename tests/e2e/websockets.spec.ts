@@ -1,6 +1,5 @@
 import { Intercept } from '../../dist';
 import { test as base, expect } from '@playwright/test';
-import path from 'path';
 
 type BaseFixtures = {
     intercept: Intercept;
@@ -9,9 +8,7 @@ type BaseFixtures = {
 const test = base.extend<BaseFixtures>({
     intercept: async ({ page }, use) => {
         await use(
-            new Intercept(page, {
-                fixturePathPrefix: path.join(process.cwd(), 'tests/e2e'),
-            })
+            new Intercept(page)
         );
     },
 });
@@ -24,12 +21,18 @@ test.describe('Websockets', () => {
                 if (message === "Hello PieSocket!") {
                     send!("Hi there");
                 }
+
+                if (message === "intercept:handshake") {
+                    send!("I have intercepted the handshake!");
+                }
             }
         });
 
         await page.goto('https://piehost.com/websocket-tester');
 
         await page.getByRole('button', { name: 'Connect' }).click();
+
+        await mockWebsocketServer.wait();
 
         await expect(page.getByText('Connection Established')).toBeVisible();
 
@@ -39,6 +42,8 @@ test.describe('Websockets', () => {
 
         await expect(page.getByText('Hi there')).toBeVisible();
 
-        expect(mockWebsocketServer.wssPayloads?.length).toBe(1);
+        expect(mockWebsocketServer.wssPayloads?.length).toBe(2);
+
+        expect(mockWebsocketServer.wssPayloads?.[1]).toBe("Hello PieSocket!");
     });
 });
