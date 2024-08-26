@@ -374,6 +374,8 @@ test.describe('Simple Usage', () => {
       await page.locator('#url').fill(`${hostnamePrefix}/unhandled/2`);
       await page.locator('#submit').click();
 
+      await getRequest.wait();
+
       expect(intercept.unhandledRequests).toHaveLength(2);
 
       expect(intercept.unhandledRequests[0].url()).toBe(
