@@ -13,7 +13,7 @@ This fixture extension provides a Cypress-influenced API (like [`cy.intercept`](
 - Strongly typed in TypeScript
 - Test coverage
 
-### Installation
+### Installation ([npm](https://www.npmjs.com/package/playwright-intercept))
 
 ```bash
 npm i playwright-intercept --save-dev
