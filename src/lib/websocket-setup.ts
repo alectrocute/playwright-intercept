@@ -46,6 +46,8 @@ export async function websocketSetup(page: Page, options: WebsocketOptions): Pro
     wss.on('connection', (ws: WebSocket) => {
       send = ws.send.bind(ws);
 
+      options.handler({ message: 'intercept:handshake', send });
+
       ws.on('message', (data) => {
         interceptSetup.wssPayloads?.push(data.toString());
         options.handler({ message: data.toString(), send });
